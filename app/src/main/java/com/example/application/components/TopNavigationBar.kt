@@ -16,6 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.application.models.DataConverter
+import com.example.application.models.LengthConverter
+import com.example.application.models.MassConverter
 import com.example.application.screens.MainScreen
 import kotlinx.coroutines.launch
 
@@ -66,8 +68,8 @@ fun TopNavigationBar(screens: List<String>) {
     ) {
         NavHost(navController = navController, startDestination = "data") {
             composable("data") { MainScreen(DataConverter()) }
-            composable("length") { Text(text = "Length", fontSize = 36.sp) }
-            composable("mass") { Text(text = "Mass", fontSize = 36.sp) }
+            composable("length") { MainScreen(LengthConverter()) }
+            composable("mass") { MainScreen(MassConverter()) }
         }
     }
 }

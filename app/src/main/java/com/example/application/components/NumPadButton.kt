@@ -1,5 +1,6 @@
 package com.example.application.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -22,8 +24,14 @@ fun NumPadButton(
         modifier = Modifier
             .fillMaxWidth(width)
             .fillMaxHeight(height)
-            .padding(horizontal = 8.dp, vertical = 8.dp)
     ) {
-        Text(text = text, fontSize = 36.sp)
+        Text(
+            text = text,
+            fontSize = if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                36.sp
+            } else {
+                18.sp
+            }
+        )
     }
 }
