@@ -1,6 +1,5 @@
 package com.example.application.screens
 
-import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,12 +9,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.application.BuildConfig
 import com.example.application.utils.addSymbol
 import com.example.application.components.NumPadButton
 import com.example.application.utils.formatAndToDouble
@@ -35,7 +35,7 @@ fun MainScreen(converter: Converter) {
     var secondLabel by remember { mutableStateOf(converter.unitsList[0].code) }
     val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
-    val orientation = LocalConfiguration.current.orientation
+    val clipboardManager = LocalClipboardManager.current
 
     fun numPadButtonOnClick(string: String) {
         if (selectedField) {
@@ -56,14 +56,6 @@ fun MainScreen(converter: Converter) {
                     firstLabel
                 )
             )
-        }
-    }
-
-    fun getPadding(): Dp {
-        return if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            80.dp
-        } else {
-            0.dp
         }
     }
 
@@ -129,73 +121,107 @@ fun MainScreen(converter: Converter) {
             }
         }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Row(
+        Column {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.25f)
+                    .fillMaxHeight(0.5f)
             ) {
-                Text(
-                    text = firstLabel,
+                Column(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(0.2f)
-                        .padding(horizontal = 20.dp)
-                        .padding(top = getPadding())
-                        .wrapContentSize(align = Alignment.CenterStart)
-                        .clickable { selectedLabel = true; scope.launch { state.show() } },
-                    fontSize = 24.sp
-                )
-                Text(
-                    text = firstField,
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.5f)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.5f)
+                    ) {
+                        Text(
+                            text = firstLabel,
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(0.2f)
+                                .padding(horizontal = 20.dp)
+                                .wrapContentSize(align = Alignment.BottomStart)
+                                .clickable { selectedLabel = true; scope.launch { state.show() } },
+                            fontSize = 24.sp
+                        )
+                        Text(
+                            text = firstField,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 20.dp)
+                                .wrapContentSize(align = Alignment.BottomEnd)
+                                .clickable { selectedField = true },
+                            fontSize = if (firstField.length < 20) 26.sp else if (firstField.length < 26) 22.sp else 19.sp,
+                            color = if (selectedField) {
+                                Color.Blue
+                            } else {
+                                Color.Black
+                            }
+                        )
+                    }
+                    if (BuildConfig.IS_PRO) {
+                        Text(
+                            text = "Copy",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 20.dp)
+                                .wrapContentSize(align = Alignment.TopEnd)
+                                .clickable { clipboardManager.setText(AnnotatedString(firstField)) }
+                        )
+                    } else {
+                        Surface(modifier = Modifier.fillMaxSize()) {}
+                    }
+                }
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 20.dp)
-                        .padding(top = getPadding())
-                        .wrapContentSize(align = Alignment.CenterEnd)
-                        .clickable { selectedField = true },
-                    fontSize = if (firstField.length < 20) 26.sp else if (firstField.length < 26) 22.sp else 19.sp,
-                    color = if (selectedField) {
-                        Color.Blue
-                    } else {
-                        Color.Black
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.5f)
+                    ) {
+                        Text(
+                            text = secondLabel,
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(0.2f)
+                                .padding(horizontal = 20.dp)
+                                .wrapContentSize(align = Alignment.BottomStart)
+                                .clickable { selectedLabel = false; scope.launch { state.show() } },
+                            fontSize = 24.sp
+                        )
+                        Text(
+                            text = secondField,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 20.dp)
+                                .wrapContentSize(align = Alignment.BottomEnd)
+                                .clickable { selectedField = false },
+                            fontSize = if (secondField.length < 20) 26.sp else if (secondField.length < 26) 22.sp else 19.sp,
+                            color = if (selectedField) {
+                                Color.Black
+                            } else {
+                                Color.Blue
+                            }
+                        )
                     }
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.33f)
-            ) {
-                Text(
-                    text = secondLabel,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(0.2f)
-                        .padding(horizontal = 20.dp)
-                        .padding(bottom = getPadding())
-                        .wrapContentSize(align = Alignment.CenterStart)
-                        .clickable { selectedLabel = false; scope.launch { state.show() } },
-                    fontSize = 24.sp
-                )
-                Text(
-                    text = secondField,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 20.dp)
-                        .padding(bottom = getPadding())
-                        .wrapContentSize(align = Alignment.CenterEnd)
-                        .clickable { selectedField = false },
-                    fontSize = if (secondField.length < 20) 26.sp else if (secondField.length < 26) 22.sp else 19.sp,
-                    color = if (selectedField) {
-                        Color.Black
+                    if (BuildConfig.IS_PRO) {
+                        Text(
+                            text = "Copy",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 20.dp)
+                                .wrapContentSize(align = Alignment.TopEnd)
+                                .clickable { clipboardManager.setText(AnnotatedString(secondField)) }
+                        )
                     } else {
-                        Color.Blue
+                        Surface(modifier = Modifier.fillMaxSize()) {}
                     }
-                )
+                }
             }
             Row(
                 modifier = Modifier
@@ -261,7 +287,18 @@ fun MainScreen(converter: Converter) {
                             onClick = { numPadButtonOnClick("3") })
                     }
                     Row {
-                        Surface(modifier = Modifier.fillMaxWidth(0.33f)) {}
+                        if (BuildConfig.IS_PRO) {
+                            NumPadButton(
+                                text = "S",
+                                onClick = {
+                                    firstLabel = secondLabel.also { secondLabel = firstLabel }
+                                    firstField = secondField.also { secondField = firstField }
+                                },
+                                width = 0.33f
+                            )
+                        } else {
+                            Surface(modifier = Modifier.fillMaxWidth(0.33f)) {}
+                        }
                         NumPadButton(
                             text = "0",
                             onClick = { numPadButtonOnClick("0") },
