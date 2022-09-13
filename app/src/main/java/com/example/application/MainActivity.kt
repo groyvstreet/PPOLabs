@@ -3,27 +3,26 @@ package com.example.application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.*
+import androidx.activity.viewModels
 import androidx.compose.runtime.*
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.application.ui.theme.ApplicationTheme
 import com.example.application.components.TopNavigationBar
+import com.example.application.viewModels.ConverterViewModel
 
 class MainActivity : ComponentActivity() {
+    private val converterViewModel by viewModels<ConverterViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ApplicationTheme {
-                ConverterApp()
+                ConverterApp(converterViewModel)
             }
         }
     }
 }
 
-@Preview
 @Composable
-@OptIn(ExperimentalMaterialApi::class)
-fun ConverterApp() {
+fun ConverterApp(converterViewModel: ConverterViewModel) {
     val screens = listOf("Data", "Length", "Mass")
-    TopNavigationBar(screens = screens)
+    TopNavigationBar(screens = screens, converterViewModel)
 }

@@ -8,56 +8,33 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.application.BuildConfig
-import com.example.application.utils.addSymbol
+import com.example.application.R
 import com.example.application.components.NumPadButton
-import com.example.application.utils.formatAndToDouble
 import com.example.application.models.Converter
-import com.example.application.utils.removeSymbol
-import com.example.application.utils.toStringAndFormat
+import com.example.application.viewModels.ConverterViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
-fun MainScreen(converter: Converter) {
-    var selectedField by remember { mutableStateOf(true) }
-    var firstField by remember { mutableStateOf("0") }
-    var secondField by remember { mutableStateOf("0") }
+fun MainScreen(
+    converter: Converter,
+    converterViewModel: ConverterViewModel
+) {
+    converterViewModel.converter = converter
+    val converterUiState by converterViewModel.uiState.collectAsState()
     var selectedLabel by remember { mutableStateOf(true) }
-    var firstLabel by remember { mutableStateOf(converter.unitsList[1].code) }
-    var secondLabel by remember { mutableStateOf(converter.unitsList[0].code) }
+    var selectedField by remember { mutableStateOf(true) }
     val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     val clipboardManager = LocalClipboardManager.current
-
-    fun numPadButtonOnClick(string: String) {
-        if (selectedField) {
-            firstField = addSymbol(firstField, string)
-            secondField = toStringAndFormat(
-                converter.convert(
-                    formatAndToDouble(firstField),
-                    firstLabel,
-                    secondLabel
-                )
-            )
-        } else {
-            secondField = addSymbol(secondField, string)
-            firstField = toStringAndFormat(
-                converter.convert(
-                    formatAndToDouble(secondField),
-                    secondLabel,
-                    firstLabel
-                )
-            )
-        }
-    }
 
     ModalBottomSheetLayout(
         sheetState = state,
@@ -67,8 +44,8 @@ fun MainScreen(converter: Converter) {
                     ListItem(
                         text = {
                             Text(
-                                text = "Select unit",
-                                fontSize = 24.sp,
+                                text = stringResource(R.string.select_unit),
+                                fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center
                             )
@@ -81,28 +58,11 @@ fun MainScreen(converter: Converter) {
                             TextButton(
                                 onClick = {
                                     scope.launch {
-                                        if (selectedLabel) {
-                                            firstLabel = item.code
-                                        } else {
-                                            secondLabel = item.code
-                                        }
-                                        if (selectedField) {
-                                            secondField = toStringAndFormat(
-                                                converter.convert(
-                                                    formatAndToDouble(firstField),
-                                                    firstLabel,
-                                                    secondLabel
-                                                )
-                                            )
-                                        } else {
-                                            firstField = toStringAndFormat(
-                                                converter.convert(
-                                                    formatAndToDouble(secondField),
-                                                    secondLabel,
-                                                    firstLabel
-                                                )
-                                            )
-                                        }
+                                        converterViewModel.selectUnit(
+                                            item.code,
+                                            selectedLabel,
+                                            selectedField
+                                        )
                                         state.hide()
                                     }
                                 },
@@ -138,7 +98,7 @@ fun MainScreen(converter: Converter) {
                             .fillMaxHeight(0.5f)
                     ) {
                         Text(
-                            text = firstLabel,
+                            text = converterUiState.unit1,
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .fillMaxWidth(0.2f)
@@ -148,28 +108,34 @@ fun MainScreen(converter: Converter) {
                             fontSize = 24.sp
                         )
                         Text(
-                            text = firstField,
+                            text = converterUiState.value1,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(horizontal = 20.dp)
                                 .wrapContentSize(align = Alignment.BottomEnd)
                                 .clickable { selectedField = true },
-                            fontSize = if (firstField.length < 20) 26.sp else if (firstField.length < 26) 22.sp else 19.sp,
+                            fontSize = if (converterUiState.value1.length < 20) 26.sp else if (converterUiState.value1.length < 26) 22.sp else 19.sp,
                             color = if (selectedField) {
-                                Color.Blue
+                                MaterialTheme.colors.primary
                             } else {
-                                Color.Black
+                                MaterialTheme.colors.onSurface
                             }
                         )
                     }
                     if (BuildConfig.IS_PRO) {
                         Text(
-                            text = "Copy",
+                            text = stringResource(R.string.copy),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(horizontal = 20.dp)
                                 .wrapContentSize(align = Alignment.TopEnd)
-                                .clickable { clipboardManager.setText(AnnotatedString(firstField)) }
+                                .clickable {
+                                    clipboardManager.setText(
+                                        AnnotatedString(
+                                            converterUiState.value1
+                                        )
+                                    )
+                                }
                         )
                     } else {
                         Surface(modifier = Modifier.fillMaxSize()) {}
@@ -185,7 +151,7 @@ fun MainScreen(converter: Converter) {
                             .fillMaxHeight(0.5f)
                     ) {
                         Text(
-                            text = secondLabel,
+                            text = converterUiState.unit2,
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .fillMaxWidth(0.2f)
@@ -195,28 +161,34 @@ fun MainScreen(converter: Converter) {
                             fontSize = 24.sp
                         )
                         Text(
-                            text = secondField,
+                            text = converterUiState.value2,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(horizontal = 20.dp)
                                 .wrapContentSize(align = Alignment.BottomEnd)
                                 .clickable { selectedField = false },
-                            fontSize = if (secondField.length < 20) 26.sp else if (secondField.length < 26) 22.sp else 19.sp,
+                            fontSize = if (converterUiState.value2.length < 20) 26.sp else if (converterUiState.value2.length < 26) 22.sp else 19.sp,
                             color = if (selectedField) {
-                                Color.Black
+                                MaterialTheme.colors.onSurface
                             } else {
-                                Color.Blue
+                                MaterialTheme.colors.primary
                             }
                         )
                     }
                     if (BuildConfig.IS_PRO) {
                         Text(
-                            text = "Copy",
+                            text = stringResource(R.string.copy),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(horizontal = 20.dp)
                                 .wrapContentSize(align = Alignment.TopEnd)
-                                .clickable { clipboardManager.setText(AnnotatedString(secondField)) }
+                                .clickable {
+                                    clipboardManager.setText(
+                                        AnnotatedString(
+                                            converterUiState.value2
+                                        )
+                                    )
+                                }
                         )
                     } else {
                         Surface(modifier = Modifier.fillMaxSize()) {}
@@ -238,17 +210,17 @@ fun MainScreen(converter: Converter) {
                     ) {
                         NumPadButton(
                             text = "7",
-                            onClick = { numPadButtonOnClick("7") },
+                            onClick = { converterViewModel.addSymbolTo("7", selectedField) },
                             width = 0.33f
                         )
                         NumPadButton(
                             text = "8",
-                            onClick = { numPadButtonOnClick("8") },
+                            onClick = { converterViewModel.addSymbolTo("8", selectedField) },
                             width = 0.5f
                         )
                         NumPadButton(
                             text = "9",
-                            onClick = { numPadButtonOnClick("9") })
+                            onClick = { converterViewModel.addSymbolTo("9", selectedField) })
                     }
                     Row(
                         modifier = Modifier
@@ -256,17 +228,17 @@ fun MainScreen(converter: Converter) {
                     ) {
                         NumPadButton(
                             text = "4",
-                            onClick = { numPadButtonOnClick("4") },
+                            onClick = { converterViewModel.addSymbolTo("4", selectedField) },
                             width = 0.33f
                         )
                         NumPadButton(
                             text = "5",
-                            onClick = { numPadButtonOnClick("5") },
+                            onClick = { converterViewModel.addSymbolTo("5", selectedField) },
                             width = 0.5f
                         )
                         NumPadButton(
                             text = "6",
-                            onClick = { numPadButtonOnClick("6") })
+                            onClick = { converterViewModel.addSymbolTo("6", selectedField) })
                     }
                     Row(
                         modifier = Modifier
@@ -274,26 +246,23 @@ fun MainScreen(converter: Converter) {
                     ) {
                         NumPadButton(
                             text = "1",
-                            onClick = { numPadButtonOnClick("1") },
+                            onClick = { converterViewModel.addSymbolTo("1", selectedField) },
                             width = 0.33f
                         )
                         NumPadButton(
                             text = "2",
-                            onClick = { numPadButtonOnClick("2") },
+                            onClick = { converterViewModel.addSymbolTo("2", selectedField) },
                             width = 0.5f
                         )
                         NumPadButton(
                             text = "3",
-                            onClick = { numPadButtonOnClick("3") })
+                            onClick = { converterViewModel.addSymbolTo("3", selectedField) })
                     }
                     Row {
                         if (BuildConfig.IS_PRO) {
                             NumPadButton(
                                 text = "S",
-                                onClick = {
-                                    firstLabel = secondLabel.also { secondLabel = firstLabel }
-                                    firstField = secondField.also { secondField = firstField }
-                                },
+                                onClick = { converterViewModel.swap() },
                                 width = 0.33f
                             )
                         } else {
@@ -301,44 +270,25 @@ fun MainScreen(converter: Converter) {
                         }
                         NumPadButton(
                             text = "0",
-                            onClick = { numPadButtonOnClick("0") },
+                            onClick = { converterViewModel.addSymbolTo("0", selectedField) },
                             width = 0.5f
                         )
                         NumPadButton(
                             text = ",",
-                            onClick = { numPadButtonOnClick(",") }
+                            onClick = { converterViewModel.addSymbolTo(",", selectedField) }
                         )
                     }
                 }
                 Column {
                     NumPadButton(
                         text = "AC",
-                        onClick = { firstField = "0"; secondField = "0" },
+                        onClick = { converterViewModel.clear() },
                         height = 0.5f
                     )
                     NumPadButton(
                         text = "<",
-                        onClick = {
-                            if (selectedField) {
-                                firstField = removeSymbol(firstField)
-                                secondField = toStringAndFormat(
-                                    converter.convert(
-                                        formatAndToDouble(firstField),
-                                        firstLabel,
-                                        secondLabel
-                                    )
-                                )
-                            } else {
-                                secondField = removeSymbol(secondField)
-                                firstField = toStringAndFormat(
-                                    converter.convert(
-                                        formatAndToDouble(secondField),
-                                        secondLabel,
-                                        firstLabel
-                                    )
-                                )
-                            }
-                        })
+                        onClick = { converterViewModel.removeSymbolFrom(selectedField) }
+                    )
                 }
             }
         }
