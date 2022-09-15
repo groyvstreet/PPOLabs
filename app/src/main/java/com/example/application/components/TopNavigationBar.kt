@@ -51,6 +51,7 @@ fun TopNavigationBar(screens: List<String>, converterViewModel: ConverterViewMod
                                 onClick = {
                                     scope.launch {
                                         scaffoldState.drawerState.close()
+                                        converterViewModel.clear()
                                         navController.navigate(screen.lowercase())
                                     }
                                 },

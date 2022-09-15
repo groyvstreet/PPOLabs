@@ -1,5 +1,7 @@
 package com.example.application.models
 
+import java.math.BigDecimal
+
 class MassConverter : Converter() {
     override val unitsList = listOf(
         TitleAndCode("Gram", "G"),
@@ -7,7 +9,7 @@ class MassConverter : Converter() {
         TitleAndCode("Ounce", "OZ")
     )
 
-    override fun convert(value: Double, from: String, to: String): Double {
+    override fun convert(value: BigDecimal, from: String, to: String): BigDecimal {
         return when (to) {
             "G" -> toGrams(value, from)
             "CT" -> toCarats(value, from)
@@ -16,28 +18,28 @@ class MassConverter : Converter() {
         }
     }
 
-    private fun toGrams(value: Double, code: String): Double {
+    private fun toGrams(value: BigDecimal, code: String): BigDecimal {
         return when (code) {
             "G" -> value
-            "CT" -> value / 5
-            "OZ" -> value * 28.3495231
+            "CT" -> value.times(BigDecimal("0.2"))
+            "OZ" -> value.times(BigDecimal("28.3495231"))
             else -> value
         }
     }
 
-    private fun toCarats(value: Double, code: String): Double {
+    private fun toCarats(value: BigDecimal, code: String): BigDecimal {
         return when (code) {
-            "G" -> value * 5
+            "G" -> value.times(BigDecimal("5"))
             "CT" -> value
-            "OZ" -> value * 141.747616
+            "OZ" -> value.times(BigDecimal("141.747616"))
             else -> value
         }
     }
 
-    private fun toOunce(value: Double, code: String): Double {
+    private fun toOunce(value: BigDecimal, code: String): BigDecimal {
         return when (code) {
-            "G" -> value / 28.3495231
-            "CT" -> value / 141.747616
+            "G" -> value.times(BigDecimal("0.0352739619"))
+            "CT" -> value.times(BigDecimal("0.00705479239"))
             "OZ" -> value
             else -> value
         }

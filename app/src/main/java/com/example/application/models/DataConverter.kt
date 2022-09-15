@@ -1,5 +1,7 @@
 package com.example.application.models
 
+import java.math.BigDecimal
+
 class DataConverter : Converter() {
     override val unitsList = listOf(
         TitleAndCode("Byte", "B"),
@@ -7,7 +9,7 @@ class DataConverter : Converter() {
         TitleAndCode("Megabyte", "MB")
     )
 
-    override fun convert(value: Double, from: String, to: String): Double {
+    override fun convert(value: BigDecimal, from: String, to: String): BigDecimal {
         return when (to) {
             "B" -> toBytes(value, from)
             "KB" -> toKilobytes(value, from)
@@ -16,28 +18,28 @@ class DataConverter : Converter() {
         }
     }
 
-    private fun toBytes(value: Double, code: String): Double {
+    private fun toBytes(value: BigDecimal, code: String): BigDecimal {
         return when (code) {
             "B" -> value
-            "KB" -> value * 1024
-            "MB" -> value * 1024 * 1024
+            "KB" -> value.times(BigDecimal("1024"))
+            "MB" -> value.times(BigDecimal("1048576"))
             else -> value
         }
     }
 
-    private fun toKilobytes(value: Double, code: String): Double {
+    private fun toKilobytes(value: BigDecimal, code: String): BigDecimal {
         return when (code) {
-            "B" -> value / 1024
+            "B" -> value.times(BigDecimal("0.0009765625"))
             "KB" -> value
-            "MB" -> value * 1024
+            "MB" -> value.times(BigDecimal("1024"))
             else -> value
         }
     }
 
-    private fun toMegabytes(value: Double, code: String): Double {
+    private fun toMegabytes(value: BigDecimal, code: String): BigDecimal {
         return when (code) {
-            "B" -> value / 1024 / 1024
-            "KB" -> value / 1024
+            "B" -> value.times(BigDecimal("0.00000095367431640625"))
+            "KB" -> value.times(BigDecimal("0.0009765625"))
             "MB" -> value
             else -> value
         }

@@ -1,12 +1,13 @@
 package com.example.application.viewModels
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.application.models.Converter
 import com.example.application.models.DataConverter
 import com.example.application.uiStates.ConverterUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.math.BigDecimal
 
 class ConverterViewModel : ViewModel() {
     var converter: Converter = DataConverter()
@@ -18,7 +19,7 @@ class ConverterViewModel : ViewModel() {
                 _uiState.value.value1,
                 toStringAndFormat(
                     converter.convert(
-                        formatAndToDouble(_uiState.value.value1),
+                        formatAndToBigDecimal(_uiState.value.value1),
                         _uiState.value.unit1,
                         _uiState.value.unit2
                     )
@@ -42,6 +43,48 @@ class ConverterViewModel : ViewModel() {
         )
     }
 
+    fun pasteTo(string: String, isFirstSelected: Boolean): Boolean {
+        var result = string.replace(" ", "").replace(",", ".")
+        val number = result.toBigDecimalOrNull() ?: return false
+        result = toStringAndFormat(number)
+        /*if ((result.replace(" ", "").length > 15 && "," !in result) ||
+            (result.replace(" ", "").length > 20 && "," in result)
+        ) {
+            return false
+        }*/
+        if (result.replace(" ", "").length > 101) {
+            return false
+        }
+        if (isFirstSelected) {
+            _uiState.value = ConverterUiState(
+                _uiState.value.unit1,
+                _uiState.value.unit2,
+                result,
+                toStringAndFormat(
+                    converter.convert(
+                        formatAndToBigDecimal(result),
+                        _uiState.value.unit1,
+                        _uiState.value.unit2
+                    )
+                )
+            )
+        } else {
+            _uiState.value = ConverterUiState(
+                _uiState.value.unit1,
+                _uiState.value.unit2,
+                toStringAndFormat(
+                    converter.convert(
+                        formatAndToBigDecimal(result),
+                        _uiState.value.unit2,
+                        _uiState.value.unit1
+                    )
+                ),
+                result
+            )
+        }
+        return true
+    }
+
     fun addSymbolTo(symbol: String, isFirstSelected: Boolean) {
         if (isFirstSelected) {
             val value1 = addSymbol(_uiState.value.value1, symbol)
@@ -51,7 +94,7 @@ class ConverterViewModel : ViewModel() {
                 value1,
                 toStringAndFormat(
                     converter.convert(
-                        formatAndToDouble(value1),
+                        formatAndToBigDecimal(value1),
                         _uiState.value.unit1,
                         _uiState.value.unit2
                     )
@@ -64,7 +107,7 @@ class ConverterViewModel : ViewModel() {
                 _uiState.value.unit2,
                 toStringAndFormat(
                     converter.convert(
-                        formatAndToDouble(value2),
+                        formatAndToBigDecimal(value2),
                         _uiState.value.unit2,
                         _uiState.value.unit1
                     )
@@ -97,7 +140,7 @@ class ConverterViewModel : ViewModel() {
                 _uiState.value.value1,
                 toStringAndFormat(
                     converter.convert(
-                        formatAndToDouble(_uiState.value.value1),
+                        formatAndToBigDecimal(_uiState.value.value1),
                         _uiState.value.unit1,
                         _uiState.value.unit2
                     )
@@ -109,7 +152,7 @@ class ConverterViewModel : ViewModel() {
                 _uiState.value.unit2,
                 toStringAndFormat(
                     converter.convert(
-                        formatAndToDouble(_uiState.value.value2),
+                        formatAndToBigDecimal(_uiState.value.value2),
                         _uiState.value.unit2,
                         _uiState.value.unit1
                     )
@@ -128,7 +171,7 @@ class ConverterViewModel : ViewModel() {
                 value1,
                 toStringAndFormat(
                     converter.convert(
-                        formatAndToDouble(value1),
+                        formatAndToBigDecimal(value1),
                         _uiState.value.unit1,
                         _uiState.value.unit2
                     )
@@ -141,7 +184,7 @@ class ConverterViewModel : ViewModel() {
                 _uiState.value.unit2,
                 toStringAndFormat(
                     converter.convert(
-                        formatAndToDouble(value2),
+                        formatAndToBigDecimal(value2),
                         _uiState.value.unit2,
                         _uiState.value.unit1
                     )
@@ -172,9 +215,11 @@ class ConverterViewModel : ViewModel() {
 
     private fun addSymbol(string: String, symbol: String): String {
         var result = string
-        if ((result.replace(" ", "").length < 15 && "," !in result) ||
+        /*if ((result.replace(" ", "").length < 15 && "," !in result) ||
             (result.replace(" ", "").length < 20 && "," in result) ||
             (result.replace(" ", "").length < 16 && symbol == ",")
+        ) {*/
+        if (result.replace(" ", "").length < 101
         ) {
             if (result == "0") {
                 if (symbol == ",") {
@@ -203,20 +248,26 @@ class ConverterViewModel : ViewModel() {
         return result
     }
 
-    private fun formatAndToDouble(string: String): Double {
+    private fun formatAndToBigDecimal(string: String): BigDecimal {
         var result = string.replace(" ", "").replace(",", ".")
-        if (!(result.last().isDigit()) && result.last() != '.') {
+        /*if (result.length > 101) {
             result = "0"
-        }
-        return result.toDouble()
+        }*/
+        /*if (!(result.last().isDigit()) && result.last() != '.') {
+            result = "0"
+        }*/
+        return result.toBigDecimal()
     }
 
-    private fun toStringAndFormat(number: Double): String {
-        var result = number.toBigDecimal().toPlainString()
+    private fun toStringAndFormat(number: BigDecimal): String {
+        var result = number.toPlainString()
         result = result.replace(".", ",")
         result = insertSpaces(result)
-        if (result.endsWith(",0")) {
-            result = result.dropLast(2)
+        while ("," in result && result.endsWith("0")) {
+            result = result.dropLast(1)
+        }
+        if (result.endsWith(",")) {
+            result = result.dropLast(1)
         }
         return result
     }

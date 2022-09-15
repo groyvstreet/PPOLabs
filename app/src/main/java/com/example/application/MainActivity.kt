@@ -10,8 +10,8 @@ import com.example.application.components.TopNavigationBar
 import com.example.application.viewModels.ConverterViewModel
 
 class MainActivity : ComponentActivity() {
-    private val converterViewModel by viewModels<ConverterViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
+        val converterViewModel: ConverterViewModel by viewModels()
         super.onCreate(savedInstanceState)
         setContent {
             ApplicationTheme {
