@@ -1,6 +1,7 @@
 package com.example.application.models
 
 import java.math.BigDecimal
+import java.math.MathContext
 
 class LengthConverter : Converter() {
     override val unitsList = listOf(
@@ -22,16 +23,16 @@ class LengthConverter : Converter() {
         return when (code) {
             "KM" -> value
             "MI" -> value.times(BigDecimal("1.609344"))
-            "FT" -> value.times(BigDecimal("0.0003048"))
+            "FT" -> value.divide(BigDecimal("3280"), MathContext(100))
             else -> value
         }
     }
 
     private fun toMiles(value: BigDecimal, code: String): BigDecimal {
         return when (code) {
-            "KM" -> value.times(BigDecimal("0.621371192"))
+            "KM" -> value.divide(BigDecimal("1.609344"), MathContext(100))
             "MI" -> value
-            "FT" -> value.times(BigDecimal("0.000189393939"))
+            "FT" -> value.divide(BigDecimal("5280"), MathContext(100))
             else -> value
         }
     }

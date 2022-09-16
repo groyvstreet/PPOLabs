@@ -1,6 +1,7 @@
 package com.example.application.models
 
 import java.math.BigDecimal
+import java.math.MathContext
 
 class MassConverter : Converter() {
     override val unitsList = listOf(
@@ -22,7 +23,7 @@ class MassConverter : Converter() {
         return when (code) {
             "G" -> value
             "CT" -> value.times(BigDecimal("0.2"))
-            "OZ" -> value.times(BigDecimal("28.3495231"))
+            "OZ" -> value.divide(BigDecimal("0.0352739619"), MathContext(100))
             else -> value
         }
     }
@@ -39,7 +40,7 @@ class MassConverter : Converter() {
     private fun toOunce(value: BigDecimal, code: String): BigDecimal {
         return when (code) {
             "G" -> value.times(BigDecimal("0.0352739619"))
-            "CT" -> value.times(BigDecimal("0.00705479239"))
+            "CT" -> value.divide(BigDecimal("141.747616"), MathContext(100))
             "OZ" -> value
             else -> value
         }

@@ -243,7 +243,7 @@ fun MainScreen(
                                         )
                                     )
                                     toast.cancel()
-                                    toast.setText(R.string.pasted)
+                                    toast.setText(R.string.copied)
                                     toast.show()
                                 }
                         )
