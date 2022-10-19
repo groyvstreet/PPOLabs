@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Таймер</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="title_activity_timer">Таймер</string>
+
+    <!--  SettingsScreen  -->
+    <string name="clear_data_button">Очистить данные</string>
+    <string name="data_deleted">Данные удалены</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="font_size">Размер шрифта</string>
+    <string name="language">Язык</string>
+    <string name="category_general">Общие</string>
+    <string name="font_size_big">Крупный</string>
+    <string name="font_size_medium">Средний</string>
+    <string name="font_size_small">Мелкий</string>
+
+    <!--  ElementCard  -->
+    <string name="element_card_description">Описание</string>
+    <string name="element_card_description_empty">не указано</string>
+    <string name="element_card_time">Время</string>
+    <string name="element_card_repetitions">Повторения</string>
+    <string name="element_card_time_hours">ч</string>
+    <string name="element_card_time_minutes">мин</string>
+    <string name="element_card_time_seconds">сек</string>
+    <string name="element_deleting_confirm_message">Вы уверены, что хотите удалить этот элемент?</string>
+    <string name="cycle_description">Повторяет все предыдущие элементы</string>
+    <string name="set_description">Повторяет предыдущие элементы до первого встречного сета</string>
+    <string name="cycle_title">Цикл</string>
+    <string name="set_title">Сет</string>
+
+    <!--  SequenceCard  -->
+    <string name="sequence_card_empty">Последовательность пустая</string>
+    <string name="sequence_card_start">Запустить</string>
+    <string name="sequence_card_edit">Редактировать</string>
+    <string name="sequence_deleting_confirm_message">Вы уверены, что хотите удалить эту последовательность?</string>
+
+    <!--  ContentDescription  -->
+    <string name="content_description_delete">Удалить</string>
+    <string name="content_description_show_menu">Показать меню</string>
+    <string name="content_description_settings">Настройки</string>
+    <string name="content_description_add">Добавить</string>
+
+    <string name="content_description_back">Назад</string>
+    <string name="content_description_forward">Вперед</string>
+    <string name="content_description_stop">Стоп</string>
+    <string name="content_description_start">Старт</string>
+
+    <!--  TimerToast  -->
+    <string name="timer_started">Таймер запущен</string>
+    <string name="timer_finished">Таймер закончил работу</string>
+
+    <!--  Notification  -->
+    <string name="notification_back">Назад</string>
+    <string name="notification_forward">Вперед</string>
+    <string name="notification_pause">Пауза</string>
+    <string name="notification_resume">Продолжить</string>
+
+    <!--  General  -->
+    <string name="title">Наименование</string>
+    <string name="title_error_message">Введите наименование</string>
+    <string name="finish">ФИНИШ</string>
+    <string name="time_error_message">Минимальное значение 1 секунда</string>
+
+    <!--  Buttons  -->
+    <string name="button_add">Добавить</string>
+    <string name="button_close">Закрыть</string>
+    <string name="button_color">Цвет</string>
+    <string name="button_save">Сохранить</string>
+    <string name="button_cancel">Отмена</string>
+
+    <!--  Widgets  -->
+    <string name="appwidget_text">Виджет таймера</string>
+    <string name="app_widget_description">Виджет таймера</string>
+    <string name="add_widget">Добавить виджет</string>
+    <string name="timer_not_started">Таймер не запущен</string>
+</resources>

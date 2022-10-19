@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">Timer</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_timer">TimerActivity</string>
+
+    <!--  SettingsScreen  -->
+    <string name="clear_data_button">Clear data</string>
+    <string name="data_deleted">Data is removed</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="font_size">Font size</string>
+    <string name="language">Language</string>
+    <string name="category_general">General</string>
+    <string name="font_size_big">Big</string>
+    <string name="font_size_medium">Medium</string>
+    <string name="font_size_small">Small</string>
+
+    <!--  ElementCard  -->
+    <string name="element_card_description">Description</string>
+    <string name="element_card_description_empty">no mention</string>
+    <string name="element_card_time">Time</string>
+    <string name="element_card_repetitions">Repetitions</string>
+    <string name="element_card_time_hours">h</string>
+    <string name="element_card_time_minutes">min</string>
+    <string name="element_card_time_seconds">sec</string>
+    <string name="element_deleting_confirm_message">Are you sure that you want to delete this element?</string>
+    <string name="cycle_description">Repeats all previous elements</string>
+    <string name="set_description">Repeats previous items until the first counter set</string>
+    <string name="cycle_title">Cycle</string>
+    <string name="set_title">Set</string>
+
+    <!--  SequenceCard  -->
+    <string name="sequence_card_empty">Sequence is empty</string>
+    <string name="sequence_card_start">Start</string>
+    <string name="sequence_card_edit">Edit</string>
+    <string name="sequence_deleting_confirm_message">Are you sure that you want to delete this sequence?</string>
+
+    <!--  ContentDescription  -->
+    <string name="content_description_delete">Delete</string>
+    <string name="content_description_show_menu">Show menu</string>
+    <string name="content_description_settings">Settings</string>
+    <string name="content_description_add">Add</string>
+
+    <string name="content_description_back">Back</string>
+    <string name="content_description_forward">Forward</string>
+    <string name="content_description_stop">Stop</string>
+    <string name="content_description_start">Start</string>
+
+    <!--  TimerToast  -->
+    <string name="timer_started">Timer is started</string>
+    <string name="timer_finished">Timer finished</string>
+
+    <!--  Notification  -->
+    <string name="notification_back">Back</string>
+    <string name="notification_forward">Forward</string>
+    <string name="notification_pause">Pause</string>
+    <string name="notification_resume">Resume</string>
+
+    <!--  General  -->
+    <string name="title">Title</string>
+    <string name="title_error_message">Enter the title</string>
+    <string name="finish">FINISH</string>
+    <string name="time_error_message">Minimal value is 1 second</string>
+
+    <!--  Buttons  -->
+    <string name="button_add">Add</string>
+    <string name="button_close">Close</string>
+    <string name="button_color">Color</string>
+    <string name="button_save">Save</string>
+    <string name="button_cancel">Cancel</string>
+
+    <!--  Widgets  -->
+    <string name="appwidget_text">Timer widget</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">Timer widget</string>
+    <string name="timer_not_started">Timer is not started</string>
+</resources>
