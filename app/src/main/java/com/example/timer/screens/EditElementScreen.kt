@@ -143,24 +143,6 @@ fun EditElementScreen(
                 .fillMaxWidth()
                 .onFocusChanged { singleLineForDescription = !singleLineForDescription }
         )
-        /*OutlinedTextFieldWithError(
-            value = viewModel.time,
-            onValueChange = { viewModel.updateTime(it) },
-            label = stringResource(id = R.string.element_card_time),
-            showError = viewModel.isTimeInvalid(),
-            errorMessage = stringResource(id = R.string.int_error_message),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )*/
-        /*OutlinedTextFieldWithError(
-            value = viewModel.repetition,
-            onValueChange = { viewModel.updateRepetition(it) },
-            label = stringResource(id = R.string.element_card_repetitions),
-            showError = viewModel.isRepetitionInvalid(),
-            errorMessage = stringResource(id = R.string.int_error_message),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )*/
         TextButton(
             onClick = { isTimeDialogOpened = true },
             modifier = Modifier.fillMaxWidth()

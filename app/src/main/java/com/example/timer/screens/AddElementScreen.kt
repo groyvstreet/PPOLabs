@@ -374,7 +374,7 @@ fun AddElementScreen(
             }
         }
         Divider()
-        Text(text = "Добавить сет")
+        Text(text = stringResource(id = R.string.add_set))
         TextButton(
             onClick = { isSetRepetitionsDialogOpened = true },
             modifier = Modifier.fillMaxWidth()
@@ -407,7 +407,7 @@ fun AddElementScreen(
             Text(text = stringResource(id = R.string.button_add))
         }
         Divider()
-        Text(text = "Добавить цикл")
+        Text(text = stringResource(id = R.string.add_cycle))
         TextButton(
             onClick = { isCycleRepetitionsDialogOpened = true },
             modifier = Modifier.fillMaxWidth()

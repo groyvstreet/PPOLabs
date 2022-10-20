@@ -1,5 +1,6 @@
 package com.example.timer
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -31,7 +32,7 @@ class TimerWidget : AppWidgetProvider() {
         appWidgetIds: IntArray
     ) {
         for (appWidgetId in appWidgetIds) {
-            startTimer(context, appWidgetManager, appWidgetId);
+            startTimer(context, appWidgetManager, appWidgetId)
         }
     }
 
@@ -59,10 +60,11 @@ class TimerWidget : AppWidgetProvider() {
                 resources.updateConfiguration(configuration, resources.displayMetrics)
                 updateAppWidget(context, appWidgetManager, appWidgetId)
             }
-        }, 0, 100)
+        }, 0, 10)
     }
 }
 
+@SuppressLint("UnspecifiedImmutableFlag")
 internal fun updateAppWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,

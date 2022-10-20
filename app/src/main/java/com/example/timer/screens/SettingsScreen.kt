@@ -1,8 +1,10 @@
 package com.example.timer.screens
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.view.Window
+import android.os.AsyncTask
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -13,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
@@ -21,20 +22,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.example.timer.R
 
+@SuppressLint("ShowToast")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsScreen(
-    navController: NavHostController,
     isDarkTheme: Boolean,
     fontSize: String,
     language: String,
     updateIsDarkTheme: () -> Unit,
     updateFontSize: () -> Unit,
-    updateLanguage: () -> Unit
+    updateLanguage: () -> Unit,
+    clearData: () -> Unit
 ) {
+    val context = LocalContext.current
+    val toast = Toast.makeText(LocalContext.current, "", Toast.LENGTH_SHORT)
+    var buttonText by remember { mutableStateOf("") }
+    var infoText by remember { mutableStateOf("") }
+    buttonText = stringResource(id = R.string.clear_data_button)
+    infoText = stringResource(id = R.string.text_additional_information)
     val preferences: SharedPreferences =
         LocalContext.current.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
@@ -197,6 +204,63 @@ fun SettingsScreen(
             subText = languageEntries[languageIndex],
             onClick = { isLanguageDialogOpened = true }
         )
+        Button(
+            onClick = {
+                AsyncTask.execute {
+                    clearData()
+                    toast.cancel()
+                    toast.setText(context.getString(R.string.data_deleted))
+                    toast.show()
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(buttonText)
+        }
+        Text(
+            text = stringResource(id = R.string.category_additional_information),
+            color = MaterialTheme.colors.primary,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+        )
+        Card(
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .fillMaxWidth(),
+            elevation = 0.dp
+        ) {
+            Row(
+                modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(34.dp)
+                            .clip(shape = Shapes().medium)
+                            .background(Color.White)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Info,
+                            contentDescription = "",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(14.dp))
+
+                    Text(
+                        text = infoText,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
     }
 }
 

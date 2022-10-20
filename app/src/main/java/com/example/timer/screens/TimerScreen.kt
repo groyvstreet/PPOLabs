@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.example.timer.R
 import com.example.timer.models.Element
 import com.example.timer.services.TimerService
@@ -60,33 +59,12 @@ fun getPhases(items: List<Element>, baseIndex: Int = 0): List<Element> {
 @Composable
 fun TimerScreen(
     viewModel: ElementListViewModel = hiltViewModel(),
-    navController: NavHostController,
     timerService: TimerService
 ) {
     var isStarted by remember {mutableStateOf(false)}
     val elements = viewModel.elements.collectAsState(initial = emptyList()).value
     val phasesState: MutableState<List<Element>> = remember { mutableStateOf(listOf()) }
     if (elements.isNotEmpty() && phasesState.value.isEmpty()) {
-        /*for (i in elements.indices) {
-            for (j in 0..elements[i].repetition) {
-                if (elements[i].title.contains("{!set!}")) {
-                    for (k in i - 1 downTo 0 step 1) {
-
-                    }
-                }
-                val temp = Element(
-                    id = phasesState.value.size.toString(),
-                    title = elements[i].title,
-                    time = elements[i].time
-                )
-                val newList = mutableListOf<Element>()
-                phasesState.value.forEach {
-                    newList.add(it)
-                }
-                newList.add(temp)
-                phasesState.value = newList
-            }
-        }*/
         phasesState.value = getPhases(elements)
         timerService.phases = phasesState.value
         timerService.current.value = phasesState.value[0]
@@ -133,7 +111,6 @@ fun TimerScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        //text = df.format(current.time.toFloat() / 1000).toInt().toString(),
                         text = "${
                             if (currentHours < 10) {
                                 0
@@ -234,10 +211,7 @@ fun TimerScreen(
                 }
                 Divider()
                 LazyColumn {
-                    //var staticIndexToSelect = -1
                     itemsIndexed(timerService.phases) { index, element ->
-                        //staticIndexToSelect += 1
-                        //val indexToSelect = staticIndexToSelect
                         val hours = element.time / 1000 / 3600
                         val minutes = (element.time / 1000 - hours * 3600) / 60
                         val seconds = element.time / 1000 - hours * 3600 - minutes * 60

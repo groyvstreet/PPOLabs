@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
@@ -81,11 +80,6 @@ class TimerService : Service() {
             toast.cancel()
             toast.setText(stringTimerStarted)
             toast.show()
-            val preferences: SharedPreferences =
-                getSharedPreferences("settings", Context.MODE_PRIVATE)
-            val editor = preferences.edit()
-            editor.putBoolean("isLoading", false)
-            editor.apply()
             clickPendingIntent()?.send()
             startTimer()
             TimerWidget.isTimerStarted = true
@@ -371,6 +365,9 @@ class TimerService : Service() {
     fun goBack() {
         stopTimer()
         index.value -= 1
+        if (index.value < 0) {
+            index.value = 0
+        }
         isBackEnabled.value = index.value > 0 && index.value < phases.size
         isForwardEnabled.value = index.value < phases.size
         current.value = phases[index.value]

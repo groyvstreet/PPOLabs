@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Таймер</string>
-    <string name="title_activity_settings">Настройки</string>
-    <string name="title_activity_timer">Таймер</string>
 
     <!--  SettingsScreen  -->
     <string name="clear_data_button">Очистить данные</string>
@@ -14,6 +12,8 @@
     <string name="font_size_big">Крупный</string>
     <string name="font_size_medium">Средний</string>
     <string name="font_size_small">Мелкий</string>
+    <string name="category_additional_information">Дополнительная информация</string>
+    <string name="text_additional_information">При очистке оперативной памяти фоновая работа таймера может сбрасываться, к сожалению, это зависит от конкретного, используемого вами устройства и никак не может быть исправлено на стадии разработки. Посмотрите как закрепить приложение в оперативной памяти на вашем устройстве.</string>
 
     <!--  ElementCard  -->
     <string name="element_card_description">Описание</string>
@@ -28,6 +28,8 @@
     <string name="set_description">Повторяет предыдущие элементы до первого встречного сета</string>
     <string name="cycle_title">Цикл</string>
     <string name="set_title">Сет</string>
+    <string name="add_set">Добавить сет</string>
+    <string name="add_cycle">Добавить цикл</string>
 
     <!--  SequenceCard  -->
     <string name="sequence_card_empty">Последовательность пустая</string>
@@ -74,4 +76,11 @@
     <string name="app_widget_description">Виджет таймера</string>
     <string name="add_widget">Добавить виджет</string>
     <string name="timer_not_started">Таймер не запущен</string>
+
+    <!--  Screens  -->
+    <string name="screen_add_sequence">Новая последовательность</string>
+    <string name="screen_edit_sequence">Изменить последовательность</string>
+    <string name="screen_add_element">Новый элемент</string>
+    <string name="screen_edit_element">Изменить элемент</string>
+    <string name="screen_settings">Настройки</string>
 </resources>

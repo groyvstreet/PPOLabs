@@ -6,11 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.timer.R
 import com.example.timer.data.ElementRepository
 import com.example.timer.data.SequenceRepository
 import com.example.timer.models.Element
-import com.example.timer.utils.ResourcesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,7 +17,6 @@ import javax.inject.Inject
 class AddEditElementViewModel @Inject constructor(
     private val repository: ElementRepository,
     private val sequenceRepository: SequenceRepository,
-    private val resourcesProvider: ResourcesProvider,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -135,8 +132,8 @@ class AddEditElementViewModel @Inject constructor(
 
     fun addSet() {
         val temp = Element(
-            title = "{!set!}${resourcesProvider.getString(R.string.set_title)}",
-            description = resourcesProvider.getString(R.string.set_description),
+            title = "{!set!}",
+            description = "",
             time = 0,
             repetition = setRepetition,
             parentSequenceId = element!!.parentSequenceId
@@ -148,8 +145,8 @@ class AddEditElementViewModel @Inject constructor(
 
     fun addCycle() {
         val temp = Element(
-            title = "{!cycle!}${resourcesProvider.getString(R.string.cycle_title)}",
-            description = resourcesProvider.getString(R.string.cycle_description),
+            title = "{!cycle!}",
+            description = "",
             time = 0,
             repetition = cycleRepetition,
             parentSequenceId = element!!.parentSequenceId

@@ -11,15 +11,20 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.timer.components.TimerScaffold
+import com.example.timer.data.TimerDatabase
 import com.example.timer.services.TimerService
 import com.example.timer.ui.theme.TimerTheme
 import com.example.timer.utils.foregroundStartService
 import com.example.timer.viewModels.SequenceListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var timerDatabase: TimerDatabase
 
     private lateinit var timerService: TimerService
     private var isBound by mutableStateOf(false)
@@ -81,7 +86,8 @@ class MainActivity : ComponentActivity() {
                         language = language!!,
                         updateIsDarkTheme = ::updateIsDarkTheme,
                         updateFontSize = ::updateFontSize,
-                        updateLanguage = ::updateLanguage
+                        updateLanguage = ::updateLanguage,
+                        clearData = timerDatabase::clearAllTables
                     )
                 }
                 LaunchedEffect(key1 = isLoading) {

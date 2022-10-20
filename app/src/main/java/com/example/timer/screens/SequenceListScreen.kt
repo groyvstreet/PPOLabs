@@ -1,6 +1,5 @@
 package com.example.timer.screens
 
-import android.os.Bundle
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items

@@ -82,8 +82,7 @@ fun SequenceCard(
             .fillMaxWidth()
             .padding(start = 16.dp, top = 16.dp, end = 16.dp)
             .clickable { expanded = true },
-        elevation = 8.dp,
-        //backgroundColor = Color(android.graphics.Color.parseColor("#${sequence.color}"))
+        elevation = 8.dp
     ) {
         Row {
             Column(

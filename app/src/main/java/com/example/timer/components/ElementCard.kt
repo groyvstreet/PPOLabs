@@ -119,9 +119,9 @@ fun ElementCard(
             ) {
                 Text(
                     text = if (element.title.contains("{!set!}")) {
-                        element.title.drop(7)
+                        stringResource(id = R.string.set_title)
                     } else if (element.title.contains("{!cycle!}")) {
-                        element.title.drop(9)
+                        stringResource(id = R.string.cycle_title)
                     } else {
                         element.title
                     },
@@ -131,7 +131,15 @@ fun ElementCard(
                 )
                 if (element.title.contains("{!set!}") || element.title.contains("{!cycle!}")) {
                     Text(
-                        text = "${stringResource(id = R.string.element_card_description)}: ${element.description}",
+                        text = "${stringResource(id = R.string.element_card_description)}: ${
+                            stringResource(
+                                id = if (element.title.contains("{!set!}")) {
+                                    R.string.set_description
+                                } else {
+                                    R.string.cycle_description
+                                }
+                            )
+                        }",
                         fontWeight = FontWeight.Light
                     )
                 } else {

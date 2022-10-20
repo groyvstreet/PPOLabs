@@ -1,7 +1,6 @@
 package com.example.timer.components
 
 import android.annotation.SuppressLint
-import android.view.Window
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -41,7 +40,8 @@ fun TimerScaffold(
     language: String,
     updateIsDarkTheme: () -> Unit,
     updateFontSize: () -> Unit,
-    updateLanguage: () -> Unit
+    updateLanguage: () -> Unit,
+    clearData: () -> Unit
 ) {
     val context = LocalContext.current
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -71,7 +71,22 @@ fun TimerScaffold(
                         enabled = false
                     ) {}
                 }
-                Text(stringResource(id = R.string.app_name), fontSize = 22.sp)
+                Text(
+                    text = stringResource(
+                        id = when (currentBackStackEntry?.destination?.route) {
+                            Routes.HOME -> R.string.app_name
+                            Routes.ADD_SEQUENCE -> R.string.screen_add_sequence
+                            "${Routes.EDIT_SEQUENCE}/{sequenceId}" -> R.string.screen_edit_sequence
+                            "${Routes.EDIT_SEQUENCE}/{sequenceId}/${Routes.ADD_ELEMENT}" -> R.string.screen_add_element
+                            "${Routes.EDIT_ELEMENT}/{elementId}" -> R.string.screen_edit_element
+                            "${Routes.START_SEQUENCE}/{sequenceId}" -> R.string.app_name
+                            "${Routes.EDIT_SET_CYCLE}/{elementId}" -> R.string.screen_edit_element
+                            Routes.SETTINGS -> R.string.screen_settings
+                            else -> R.string.app_name
+                        }
+                    ),
+                    fontSize = 22.sp
+                )
                 Spacer(modifier = Modifier.weight(1f, true))
                 if (currentBackStackEntry?.destination?.route == Routes.HOME) {
                     IconButton(
@@ -128,13 +143,13 @@ fun TimerScaffold(
             }
             composable(route = Routes.SETTINGS) {
                 SettingsScreen(
-                    navController = navController,
                     isDarkTheme = isDarkTheme,
                     fontSize = fontSize,
                     language = language,
                     updateIsDarkTheme = updateIsDarkTheme,
                     updateFontSize = updateFontSize,
-                    updateLanguage = updateLanguage
+                    updateLanguage = updateLanguage,
+                    clearData = clearData
                 )
             }
             composable(
@@ -171,7 +186,6 @@ fun TimerScaffold(
                 })
             ) {
                 TimerScreen(
-                    navController = navController,
                     timerService = timerService
                 )
             }

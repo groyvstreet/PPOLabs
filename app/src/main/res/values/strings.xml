@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Timer</string>
-    <string name="title_activity_settings">Settings</string>
-    <string name="title_activity_timer">TimerActivity</string>
 
     <!--  SettingsScreen  -->
     <string name="clear_data_button">Clear data</string>
@@ -13,6 +11,8 @@
     <string name="font_size_big">Big</string>
     <string name="font_size_medium">Medium</string>
     <string name="font_size_small">Small</string>
+    <string name="category_additional_information">Additional information</string>
+    <string name="text_additional_information">When clearing RAM, the background work of the timer can be reset, unfortunately, it depends on the specific device you use and can not be fixed at the development stage. See how to lock the app into memory on your device.</string>
 
     <!--  ElementCard  -->
     <string name="element_card_description">Description</string>
@@ -27,6 +27,8 @@
     <string name="set_description">Repeats previous items until the first counter set</string>
     <string name="cycle_title">Cycle</string>
     <string name="set_title">Set</string>
+    <string name="add_set">Add set</string>
+    <string name="add_cycle">Add cycle</string>
 
     <!--  SequenceCard  -->
     <string name="sequence_card_empty">Sequence is empty</string>
@@ -73,4 +75,11 @@
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">Timer widget</string>
     <string name="timer_not_started">Timer is not started</string>
+
+    <!--  Screens  -->
+    <string name="screen_add_sequence">New sequence</string>
+    <string name="screen_edit_sequence">Edit sequence</string>
+    <string name="screen_add_element">New element</string>
+    <string name="screen_edit_element">Edit element</string>
+    <string name="screen_settings">Settings</string>
 </resources>

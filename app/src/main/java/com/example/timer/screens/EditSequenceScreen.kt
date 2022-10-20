@@ -50,6 +50,7 @@ fun EditSequenceScreen(
             }
         )
     }
+
     if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
         Column {
             Card(
