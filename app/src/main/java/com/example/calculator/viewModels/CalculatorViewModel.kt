@@ -77,8 +77,7 @@ class CalculatorViewModel : ViewModel() {
     var isCalculating by mutableStateOf(false)
         private set
 
-    var calculatingTime by mutableStateOf(0)
-        private set
+    private var calculatingTime by mutableStateOf(0)
 
     fun addSymbolToInput(symbol: String): Boolean {
         val temp = addSymbol(input, symbol)
@@ -113,8 +112,6 @@ class CalculatorViewModel : ViewModel() {
         if (cursor > input.length) {
             cursor = input.length
         }
-
-        //defineNumbers()
 
         while (true) {
             defineNumbers()
@@ -282,6 +279,8 @@ class CalculatorViewModel : ViewModel() {
                                     .toString()
                             cursor += symbol.length
                         }
+                    } else {
+                        return "error"
                     }
                 } else {
                     return "error"
@@ -362,6 +361,8 @@ class CalculatorViewModel : ViewModel() {
                             result = StringBuilder(result).insert(cursor, symbol).toString()
                             cursor += 1
                         }
+                    } else {
+                        return "error"
                     }
                 } else {
                     if (number == "0") {
@@ -372,6 +373,8 @@ class CalculatorViewModel : ViewModel() {
                             if (symbol != "0") {
                                 result = StringBuilder(result).insert(cursor, symbol).toString()
                                 cursor += 1
+                            } else {
+                                return "error"
                             }
                         }
                     } else if (number.split(',')[0] == "0") {
@@ -386,7 +389,7 @@ class CalculatorViewModel : ViewModel() {
                         if (cursor > result.indexOfFirst { it == ',' } && number.isNotEmpty()) {
                             result = StringBuilder(result).insert(cursor, symbol).toString()
                             cursor += 1
-                        } else /*if (number.split(',')[0] != "0")*/ {
+                        } else {
                             if (isDigit(result[cursor - 1].toString()) ||
                                 isOperationOrOpenBracket(result[cursor - 1].toString()) || result[cursor - 1] == ','
                             ) {
@@ -398,6 +401,8 @@ class CalculatorViewModel : ViewModel() {
                                     result = StringBuilder(result).insert(cursor, symbol).toString()
                                     cursor += 1
                                 }
+                            } else {
+                                return "error"
                             }
                         }
                     }
@@ -425,44 +430,6 @@ class CalculatorViewModel : ViewModel() {
         if (cursor == 0) {
             return
         }
-
-        /*if (input.isNotEmpty() && (isDigit(input[cursor - 1].toString()) || input[cursor - 1] == ',')) {
-            var temp = getInputWithCursor()
-            temp = temp.replace("arcsin", " ")
-            temp = temp.replace("arccos", " ")
-            temp = temp.replace("arctg", " ")
-            temp = temp.replace("sin", " ")
-            temp = temp.replace("cos", " ")
-            temp = temp.replace("tg", " ")
-            temp = temp.replace("lg", " ")
-            temp = temp.replace("ln", " ")
-            temp = temp.replace("pi", " ")
-            temp = temp.replace("e", " ")
-            temp = temp.replace("(", " ")
-            temp = temp.replace(")", " ")
-            temp = temp.replace("^", " ")
-            temp = temp.replace("!", " ")
-            temp = temp.replace("+", " ")
-            temp = temp.replace("-", " ")
-            temp = temp.replace("x", " ")
-            temp = temp.replace("/", " ")
-            temp = temp.trim()
-            val list = temp.split("\\s+".toRegex())
-            val index = list.indexOfFirst { it.contains('<') }
-            number = list[index]
-            val cursorIndex = number.indexOf('<')
-            number = StringBuilder(number).removeRange(cursorIndex - 1, cursorIndex + 1).toString()
-            if (index != list.size - 1) {
-                if (number.isNotEmpty()) {
-                    numbers = numbers.subList(0, index) + number + numbers.subList(
-                        index + 1,
-                        numbers.size
-                    )
-                } else {
-                    numbers = numbers.subList(0, index) + numbers.subList(index + 1, numbers.size)
-                }
-            }
-        }*/
 
         if (input.length >= 7 && cursor >= 7 && (input.subSequence(
                 cursor - 7,
@@ -750,10 +717,10 @@ class CalculatorViewModel : ViewModel() {
                                 try {
                                     BigDecimalMath.factorial(num, mathContext)
                                 } catch (e: ArithmeticException) {
-                                    if (e.message == "Rounding necessary") {
-                                        output = "Слишком большое число"
+                                    output = if (e.message == "Rounding necessary") {
+                                        "Слишком большое число"
                                     } else {
-                                        output = "Некорректный аргумент: x >= 0"
+                                        "Некорректный аргумент: x >= 0"
                                     }
                                     isCalculating = false
                                     return
@@ -910,29 +877,6 @@ class CalculatorViewModel : ViewModel() {
                 output = stack.last().setScale(199, RoundingMode.HALF_EVEN).toPlainString()
                     .replace('.', ',')
 
-                /*val temp = stack.last().toPlainString().split('.')
-                if (temp.size == 1) {
-                    output = temp[0]
-                } else {
-                    var counter = 0
-                    for (i in temp[1].indices) {
-                        if (temp[1][i] == '0') {
-                            counter += 1
-                        } else {
-                            break
-                        }
-                    }
-                    output = if (counter >= 199) {
-                        if (temp[0] == "-0") {
-                            "0"
-                        } else {
-                            temp[0]
-                        }
-                    } else {
-                        "${temp[0]},${temp[1]}"
-                    }
-                }*/
-
                 if (output.contains(',') && output.last() == '0') {
                     output = output.dropLastWhile { it == '0' }
 
@@ -1006,11 +950,6 @@ class CalculatorViewModel : ViewModel() {
                 output = "Ошибка: после операции ожидается число, функция или открывающая скобка"
                 return "error "
             }
-
-            /*if (tempInput[i] == ',' && !isDigit(tempInput[i + 1].toString())) {
-                output = "Ошибка: после запятой ожидается цифра"
-                return "error "
-            }*/
 
             if (tempInput.count { it == '(' } < tempInput.count { it == ')' }) {
                 output = "Ошибка: закрывающих скобок больше чем открывающих"
