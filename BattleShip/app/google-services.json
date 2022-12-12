@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "426970448342",
+    "project_id": "battleship-68d54",
+    "storage_bucket": "battleship-68d54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426970448342:android:1ce5acc28b7c02fa222477",
+        "android_client_info": {
+          "package_name": "com.example.battleship"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426970448342-u36eegnfesh82j04s39m34rht280ishe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.battleship",
+            "certificate_hash": "04b7087d73d32a1fc9c44985778868ed8b2f837b"
+          }
+        },
+        {
+          "client_id": "426970448342-qjjrrtl5q97n6ma0n05u77lr5qanrlgf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy_EGr4ZfewomPG552oGwTwhN5vFZ8sAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426970448342-qjjrrtl5q97n6ma0n05u77lr5qanrlgf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
